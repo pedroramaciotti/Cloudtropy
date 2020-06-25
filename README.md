@@ -49,4 +49,7 @@ or to compute its entropy:
      ctpy.entropy(X)
      >>> 8.4976
 
+
+but, in order to compare entropies between clouds you should read the reference, or the code documentation.
+
     
