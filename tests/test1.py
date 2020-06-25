@@ -34,6 +34,8 @@ delta_c = 0.35
 grid,pmf = cloudtropy.pmf(X,N=N_grid,delta_c=delta_c)
 entropy = cloudtropy.entropy(X,base=2,N=N_grid,delta_c=delta_c)
 
+entropy_readme = cloudtropy.entropy(X)
+
 ############## All in one
 
 fig = plt.figure(figsize=(14,3))
@@ -86,15 +88,15 @@ fig = plt.figure(figsize=(4,3))
 #
 ax3 = fig.add_subplot(1,1,1)
 cs = ax3.contourf(grid[0], grid[1], pmf, levels=np.linspace(0,pmf.max(),40), cmap='Purples_r')
-ax3.set_xlabel('x'),ax3.set_ylabel('y')
-ax3.set_title('Entropy = %.3f'%entropy)
+# ax3.set_xlabel('x'),ax3.set_ylabel('y')
+# ax3.set_title('Entropy = %.3f'%entropy)
 ax3.set_xlim(lims),ax3.set_xlim(lims),
 ax3.axis('equal')
 cbar = fig.colorbar(cs)
 #
 plt.tight_layout()
 # plt.savefig('all.pdf')
-plt.savefig('contour.png',dpi=400)
+plt.savefig('contour_simple.png',dpi=400)
 
 
 
