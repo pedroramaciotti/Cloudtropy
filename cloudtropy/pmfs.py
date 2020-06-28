@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.metrics import pairwise_distances
 
 
-def pmf(X,N=None,d=None,delta_c=None,return_grid=True):
+def pmf(X,N=None,d=None,delta_c=None,return_grid=True,lims=None):
 	"""
     Take a cloud X of P points in Q dimensions (i.e., X.shape->(P,Q)) and compute
 	a discrete-support probability mass function on a Q-dimensional grid.
@@ -25,6 +25,9 @@ def pmf(X,N=None,d=None,delta_c=None,return_grid=True):
 		If not given, computed as the greatest width divided by N.
 	return_grid : bool, default=True
         If True, return the support of the N**Q grid points.
+	lims : array of 2-tuples
+		Spatial limits of the computed probability distribution
+		function. Must have Q 2-tuples
 
     Returns
     -------
@@ -52,30 +55,36 @@ def pmf(X,N=None,d=None,delta_c=None,return_grid=True):
 	    raise ValueError('N and d parameters cannot be given at the same time.')
 	# if (d is None) and (N is None):
 	#     raise ValueError('Either N or d must be given as inputs.')
-
-	# Treating input
-	if (d is not None) and (N is None):
-		N = np.max( (X.max(axis=1)-X.min(axis=1))/d )
-	if (d is None) and (N is None):
-	    N=20
-	if delta_c is None:
-		delta_c = np.max( (X.max(axis=1)-X.min(axis=1)))/N
+	if lims is not None:
+		if len(list(lims))!=X.shape[1]:
+			raise ValueError('lims must contain the same number of 2-tuples as the dimensions of the points in the cloud (%d).'%X.shape[1])
+		if any([len(tuple)!=2 for tuple in lims]):
+			raise ValueError('lims must only contain 2-tuples.')
 
 	# Retrieving parameters of the points cloud
 	(N_points,dims) = X.shape
 	# N_points = X.shape[0]
 	# dims = X.shape[1]
 
+	# Treating input
+	if lims is None:
+		lims = []
+		for dim in range(dims):
+		    lims.append( (np.min(X[:,dim]),np.max(X[:,dim])) ) 
+	if (d is not None) and (N is None):
+		N = int(np.ceil(np.max([np.abs(lim[1]-lim[0]) for lim in lims]) / d ))
+	if (d is None) and (N is None):
+	    N=20
+	if delta_c is None:
+		delta_c = np.max( (X.max(axis=1)-X.min(axis=1)))/N
+
 	# Generating grid
-	lims = []
-	for dim in range(dims):
-	    lims.append( (np.min(X[:,dim]),np.max(X[:,dim])) )   
 	dim_arrays = []
 	for dim in range(dims):
-	    if d is not None:
-	        dim_arrays.append(np.arange(start=lims[dim][0],stop=lims[dim][1]+d,step=d))
-	    elif N is not None:
-	        dim_arrays.append(np.linspace(start=lims[dim][0],stop=lims[dim][1],num=N))
+	    # if d is not None:
+	    #     dim_arrays.append(np.arange(start=lims[dim][0],stop=lims[dim][1]+d,step=d))
+	    # elif N is not None:
+	    dim_arrays.append(np.linspace(start=lims[dim][0],stop=lims[dim][1],num=N))
 	grid = np.meshgrid(*dim_arrays)
 	# Creating the points of the grid
 	Y = np.vstack(map(np.ravel, grid)).transpose()
@@ -86,7 +95,7 @@ def pmf(X,N=None,d=None,delta_c=None,return_grid=True):
 	# Computing the PMF
 	flat_pmf = (pd<delta_c).sum(axis=0)
 	flat_pmf = flat_pmf/flat_pmf.sum()
-	pmf = np.reshape(flat_pmf,newshape=[N for i in range(dims)])
+	pmf = np.reshape(flat_pmf,newshape=[int(N) for i in range(dims)])
 
 	if return_grid:
 		return grid, pmf;

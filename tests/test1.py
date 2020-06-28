@@ -1,5 +1,4 @@
 import numpy as np
-from sklearn.metrics import pairwise_distances
 import matplotlib.pyplot as plt
 
 from mpl_toolkits import mplot3d
@@ -8,7 +7,7 @@ from mpl_toolkits import mplot3d
 
 
 import sys
-sys.path.append('..')
+sys.path.append('../')
 import cloudtropy
 
 
@@ -19,7 +18,7 @@ gen_N = 300
 lims = (-2,6)
 
 scale = 0.2
-X = np.random.uniform(low=lims[0],high=lims[1],size=(10000,2)) # back
+X = np.random.uniform(low=lims[0],high=lims[1],size=(10000,2)) # background
 X = np.concatenate([X,scale*np.random.randn(gen_N,gen_dim)+np.array([0,0])] )
 X = np.concatenate([X,scale*np.random.randn(gen_N,gen_dim)+np.array([4,0])] )
 X = np.concatenate([X,scale*np.random.randn(gen_N,gen_dim)+np.array([0,4])] )
@@ -31,10 +30,13 @@ X = np.concatenate([X,scale*np.random.randn(gen_N,gen_dim)+np.array([4,4])] )
 N_grid = 80
 delta_c = 0.35
 
-grid,pmf = cloudtropy.pmf(X,N=N_grid,delta_c=delta_c)
-entropy = cloudtropy.entropy(X,base=2,N=N_grid,delta_c=delta_c)
+# grid,pmf = cloudtropy.pmf(X,N=N_grid,delta_c=delta_c,lims=[(-2,6),(-2,6)])
+grid,pmf = cloudtropy.pmf(X,d=0.1,delta_c=delta_c,lims=[(-2,6),(-2,6)])
+entropy = cloudtropy.entropy(X,base=2,N=N_grid,delta_c=delta_c,lims=[(-3,7),(-3,7)])
 
-entropy_readme = cloudtropy.entropy(X)
+
+print(cloudtropy.entropy(X,base=2,d=0.1,delta_c=delta_c,lims=[(-3,7),(-3,7)]))
+
 
 ############## All in one
 

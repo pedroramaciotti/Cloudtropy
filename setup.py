@@ -13,13 +13,13 @@ INSTALL_REQUIRES=[
 ]
 
 setup(name='cloudtropy',
-      version='0.0.1',
+      version='0.0.2',
       description='Empirical probability mass functions and entropies of N-dimensional clouds of points.',
       author='Pedro Ramaciotti Morales',
       author_email='pedro.ramaciotti@gmail.com',
       url = 'https://github.com/pedroramaciotti/Cloudtropy',
       download_url = 'https://github.com/pedroramaciotti/Cloudtropy/archive/0.0.1.tar.gz',
-      keywords = ['entropy','probabilities'],
+      keywords = ['entropy','probabilities','entropy of points'],
       packages=find_packages(),
       data_files=[('', ['LICENSE'])],
       install_requires=INSTALL_REQUIRES)

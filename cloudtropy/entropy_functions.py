@@ -5,7 +5,7 @@ from .pmfs import pmf
 def testfunc():
     return 1;
 
-def entropy(X,base=2,N=None,d=None,delta_c=None):
+def entropy(X,base=2,N=None,d=None,delta_c=None,lims=None):
     """
     Take a cloud X of P points in Q dimensions (i.e., X.shape->(P,Q)) and compute
     the entropy of a  discrete-support probability mass function on a Q-dimensional grid.
@@ -44,5 +44,5 @@ def entropy(X,base=2,N=None,d=None,delta_c=None):
     Journal of Physics Communications 3, no. 9 (2019): 095011.
     """
 
-    p = pmf(X,N=N,d=d,delta_c=delta_c,return_grid=False)
+    p = pmf(X,N=N,d=d,delta_c=delta_c,return_grid=False,lims=lims)
     return entpy(np.ravel(p),base=base);
