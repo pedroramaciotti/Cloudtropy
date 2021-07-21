@@ -52,4 +52,8 @@ or to compute its entropy:
 
 but, in order to compare entropies between clouds you should read the reference, or the code documentation.
 
+## Acknowledgements
+
+This  work  has  been  partially funded  by the  French  National  Agency  for  Research under grant ANR-19-CE38-0006 "Geometry of Public Issues" (GOPI).
+
     
